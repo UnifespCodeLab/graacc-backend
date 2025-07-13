@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS Usuario (
     cadastro_confirmado BOOLEAN DEFAULT FALSE,
     role varchar(20) NOT NULL,
     id_paciente INT,
-    FOREIGN KEY (idPaciente)
-        REFERENCES Paciente(idPaciente)
+    FOREIGN KEY (id_paciente)
+        REFERENCES Paciente(id_paciente)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
@@ -33,6 +33,23 @@ CREATE TABLE IF NOT EXISTS Agendamento (
          ON DELETE SET NULL
          ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS Notificacao (
+     id_notificacao SERIAL PRIMARY KEY,
+     lida BOOLEAN NOT NULL,
+     data TIMESTAMP NOT NULL,
+     id_agendamento INT NOT NULL,
+     FOREIGN KEY (id_agendamento)
+         REFERENCES Agendamento(id_agendamento)
+         ON DELETE SET NULL
+         ON UPDATE CASCADE
+);
+
+INSERT INTO Agendamento (titulo, descricao, data, local, id_paciente)
+VALUES
+    ('Consulta A', 'Doutor Carlos Miguel', '2024-01-19 15:30:45', 'Sala 3 - Predio A', 1),
+    ('Consulta B', 'Doutora Mariana Silva', '2024-01-21 15:30:00', 'Sala 5 - Predio A', 1),
+    ('Consulta C', 'Doutora Mariana Silva', '2024-01-21 13:30:00', 'Sala 5 - Predio A', 2);
 
 INSERT INTO Paciente (nome) VALUES ('João Silva Costa');
 INSERT INTO Paciente (nome) VALUES ('Maria Oliveira Santos');
