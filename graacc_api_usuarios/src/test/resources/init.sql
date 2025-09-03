@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS Usuario (
     cadastro_confirmado BOOLEAN DEFAULT FALSE,
     role varchar(20) NOT NULL,
     id_paciente INT,
-    FOREIGN KEY (idPaciente)
-        REFERENCES Paciente(idPaciente)
+    FOREIGN KEY (id_paciente)
+        REFERENCES Paciente(id_paciente)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS Agendamento (
          ON UPDATE CASCADE
 );
 
-INSERT INTO Paciente (nome) VALUES ('João Silva Costa');
-INSERT INTO Paciente (nome) VALUES ('Maria Oliveira Santos');
+--INSERT INTO Paciente (nome) VALUES ('João Silva Costa');
+--INSERT INTO Paciente (nome) VALUES ('Maria Oliveira Santos');
 
 --INSERT INTO Usuario (nome, email, senha, cadastro_confirmado, role, id_paciente)
 --VALUES ('Carlos Santos', 'carlos.santos@example.com', 'senha123', false, 'ROLE_USUARIO', 2);
