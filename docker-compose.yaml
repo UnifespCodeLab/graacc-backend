@@ -63,7 +63,7 @@ services:
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
-      - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8080/pacientes
+      - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8080
     depends_on:
       - usuarios-db
 
@@ -80,8 +80,9 @@ services:
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
-    #depends_on:
+    depends_on:
     #  - agendamentos-db
+      - usuarios-db
 
   notificacoes-api:
     container_name: notificacoes-api
@@ -96,8 +97,9 @@ services:
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
-    #depends_on:
+    depends_on:
     #  - notificacoes-db
+      - usuarios-db
 
   orquestrador-api:
     container_name: orquestrador-api
