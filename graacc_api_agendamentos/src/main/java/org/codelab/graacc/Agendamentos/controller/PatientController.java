@@ -45,7 +45,7 @@ public class PatientController {
             @ApiResponse(responseCode = "200", description = "Pacientes encontrados com sucesso.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PatientResponseDTO.class))})
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN', 'USER')")
     ResponseEntity<List<PatientResponseDTO>> listAllPatients() {
         var patientsList = service.findAllPatients();
         return (patientsList.isEmpty())
