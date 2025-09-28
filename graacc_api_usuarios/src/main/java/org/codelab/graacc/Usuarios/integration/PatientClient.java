@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface PatientClient {
 
-    @PostMapping("/pesquisar")
+    @PostMapping("/pacientes/pesquisar")
     PatientDTO pesquisar(@RequestBody PatientRequestDTO patientRequestDTO);
 }
