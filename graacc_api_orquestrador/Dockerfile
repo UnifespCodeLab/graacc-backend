@@ -2,7 +2,7 @@
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Estágio 2: Imagem final com o JAR
 FROM eclipse-temurin:17-jre

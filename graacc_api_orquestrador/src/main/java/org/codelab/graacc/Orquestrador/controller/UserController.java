@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.codelab.graacc.Orquestrador.dto.appointment.AppointmentDTO;
+import org.codelab.graacc.Orquestrador.dto.patient.PatientDTO;
 import org.codelab.graacc.Orquestrador.dto.notification.NotificationDTO;
 import org.codelab.graacc.Orquestrador.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserController {
     @Operation(summary = "Obter todos Notificações de um Agendamento específico de um Usuário.", description = "Obrigatório uso de token de autenticação USER.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Notificações listados com sucesso.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = NotificationDTO.class))})})
     @GetMapping("/notificacoes/agendamento/{id}")
-    ResponseEntity<List<NotificationDTO>> obterTodasNotificacoesDeUmAgendamento(@RequestHeader("Authorization") String token,
+    ResponseEntity<List<NotificationDTO>> obterTodasNotificacoesDeUmAgendamento(@RequestHeader(value = "Authorization", required = false) String token,
                                                                                 @PathVariable("id") Long idAgendamento) {
         var resposta = userService.listarNotificacoesDeUmAgendamento(token, idAgendamento);
         return new ResponseEntity<>(resposta, HttpStatus.OK);
@@ -59,7 +60,7 @@ public class UserController {
     @Operation(summary = "Marca Notificação como Lida.", description = "Obrigatório uso de token de autenticação USER.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Notificações listados com sucesso.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = NotificationDTO.class))})})
     @PostMapping("/notificacoes/lida/{id}")
-    ResponseEntity<NotificationDTO> marcarNotificacaoComoLida(@RequestHeader("Authorization") String token,
+    ResponseEntity<NotificationDTO> marcarNotificacaoComoLida(@RequestHeader(value = "Authorization", required = false) String token,
                                                                                 @PathVariable("id") Long idNotificacao) {
         var resposta = userService.marcarNotificacaoComoLida(token, idNotificacao);
         return new ResponseEntity<>(resposta, HttpStatus.OK);
@@ -78,5 +79,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro no processamento da solicitação.");
         }
+    }
+
+    @Operation(summary = "Listar paciente especificos de um Usuário.", description = "Obrigatório uso de token de autenticação USER.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Paciente listado com sucesso.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = PatientDTO.class))})})
+    @GetMapping("/pacientes/{id}")
+    ResponseEntity<PatientDTO> obterPacienteEspecifico(@RequestHeader(value = "Authorization", required = false) String token,
+                                                              @PathVariable("id") Long idPaciente) {
+        var resposta = userService.listarPacienteEspecifico(token, idPaciente);
+        return new ResponseEntity<>(resposta, HttpStatus.OK);
     }
 }

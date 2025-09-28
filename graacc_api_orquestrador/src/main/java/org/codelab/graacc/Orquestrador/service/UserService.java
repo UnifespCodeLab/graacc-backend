@@ -2,6 +2,7 @@ package org.codelab.graacc.Orquestrador.service;
 
 import org.codelab.graacc.Orquestrador.dto.appointment.AppointmentDTO;
 import org.codelab.graacc.Orquestrador.dto.notification.NotificationDTO;
+import org.codelab.graacc.Orquestrador.dto.patient.PatientDTO;
 import org.codelab.graacc.Orquestrador.integration.AppointmentClient;
 import org.codelab.graacc.Orquestrador.integration.NotificationClient;
 import org.codelab.graacc.Orquestrador.mapper.AppointmentMapper;
@@ -41,5 +42,15 @@ public class UserService {
 
     public NotificationDTO marcarNotificacaoComoLida(String headerAuthorization, Long idNotificacao) {
         return notificationClient.marcarNotificacaoComoLida(headerAuthorization, idNotificacao);
+    }
+
+    public PatientDTO listarPacienteEspecifico(String headerAuthorization, Long idPaciente) {
+        List<PatientDTO> listPatients = appointmentClient.listarTodosPacientes(headerAuthorization);
+        for(int i = 0; i < listPatients.size(); i++) {
+          PatientDTO currentPatient = listPatients.get(i);
+          if(currentPatient.getIdPaciente() == idPaciente)
+            return currentPatient;
+        }
+        return listPatients.get(0);
     }
 }
