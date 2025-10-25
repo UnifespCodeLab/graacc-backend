@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import java.io.IOException;
 
 @SpringBootTest
 @DisplayName("UserControllerTest")
@@ -55,7 +56,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Pesquisa usuario com sucesso")
-    void testEndpointFindUserSuccessfully() {
+    void testEndpointFindUserSuccessfully() throws IOException {
         Mockito
                 .when(userServiceMock.findUser())
                 .thenReturn(UserMock.userFindedDTO());
@@ -70,7 +71,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Pesquisa usuario, nao encontra e retorna vazio.")
-    void testEndpointFindUserNotFound() {
+    void testEndpointFindUserNotFound() throws IOException {
         Mockito
                 .when(userServiceMock.findUser())
                 .thenReturn(null);
@@ -80,7 +81,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Atualiza usuario com sucesso")
-    void testEndpointUpdateUserSuccessfully() {
+    void testEndpointUpdateUserSuccessfully() throws IOException {
         var requisicao = UserMock.userUpdateRequest();
         Mockito.doNothing()
                 .when(userServiceMock).updateUser(Mockito.any(UserUpdateRequestDTO.class));

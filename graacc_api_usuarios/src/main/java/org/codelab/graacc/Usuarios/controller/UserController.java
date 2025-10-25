@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.io.IOException;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -78,7 +80,7 @@ public class UserController {
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping()
-    ResponseEntity<UserDTO> getUser() {
+    ResponseEntity<UserDTO> getUser() throws IOException {
         UserDTO user = userService.findUser();
         return (user != null)
                 ? ResponseEntity.ok().body(user)
@@ -93,9 +95,13 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     ResponseEntity<String> updateUser(@Parameter(description = "Dados de Edição do Usuário",
                                                 content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserUpdateRequestDTO.class))})
-                                     @RequestBody UserUpdateRequestDTO userRequest) {
-        userService.updateUser(userRequest);
-        return ResponseEntity.ok().build();
+                                     @RequestBody UserUpdateRequestDTO userRequest) throws IOException {
+        try {
+          userService.updateUser(userRequest);
+          return ResponseEntity.ok().build();
+        } catch (IOException e) {
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image: " + e.getMessage());
+        }
     }
 
     @Operation(summary = "Deletar dados do Usuário.", description = "É obrigatório uso de token de autenticação.")

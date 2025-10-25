@@ -1,5 +1,6 @@
 package org.codelab.graacc.Usuarios.entity;
 
+import java.util.Arrays;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +24,8 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String role;
+
+    private byte[] profileImage;
 
     private Long idPaciente;
 
@@ -93,6 +96,15 @@ public class UserEntity {
     public void setIdPaciente(Long paciente) {
         this.idPaciente = paciente;
     }
+
+    public byte[] getProfileImage() {
+      return Arrays.copyOf(profileImage, profileImage.length);
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+      this.profileImage = Arrays.copyOf(profileImage, profileImage.length);
+    }
+
 
     @Override
     public String toString() {

@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.io.IOException;
 
 @SpringBootTest
 @DisplayName("UserServiceTest")
@@ -127,7 +128,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Atualiza usuario com sucesso")
-    void testUpdateUserSuccessfully() {
+    void testUpdateUserSuccessfully() throws IOException {
         securityMockSetup();
         UserUpdateRequestDTO requisicao = new UserUpdateRequestDTO();
         requisicao.setEmail("ana.costa@gmail.com");

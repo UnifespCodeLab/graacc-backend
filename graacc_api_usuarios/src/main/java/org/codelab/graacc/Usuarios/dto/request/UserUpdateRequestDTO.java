@@ -1,9 +1,11 @@
 package org.codelab.graacc.Usuarios.dto.request;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserUpdateRequestDTO {
     private String nome;
     private String email;
     private String nomeCompletoPaciente;
+    private MultipartFile profileImage;
 
     public String getNome() {
         return nome;
@@ -27,5 +29,13 @@ public class UserUpdateRequestDTO {
 
     public void setNomeCompletoPaciente(String nomeCompletoPaciente) {
         this.nomeCompletoPaciente = nomeCompletoPaciente;
+    }
+
+    public void setProfileImage(MultipartFile profileImage) {
+      this.profileImage = profileImage;
+    }
+
+    public MultipartFile getProfileImage() {
+      return profileImage;
     }
 }

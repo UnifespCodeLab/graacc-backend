@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import java.io.IOException;
 
 @Service
 @Transactional
@@ -95,12 +95,13 @@ public class UserService {
         return null;
     }
 
-    public void updateUser(UserUpdateRequestDTO userRequest) {
+    public void updateUser(UserUpdateRequestDTO userRequest) throws IOException {
         UserLoggedInfo userLogged = getUserFromToken();
         UserEntity userEntity = userRepository.findByIdUsuario(userLogged.getIdUsuario());
         if (userEntity != null) {
             if (userRequest.getNome() != null) userEntity.setNome(userRequest.getNome());
             if (userRequest.getEmail() != null) userEntity.setEmail(userRequest.getEmail());
+            if (userRequest.getProfileImage() != null) userEntity.setProfileImage(userRequest.getProfileImage().getBytes());
             if (userRequest.getNomeCompletoPaciente() != null) {
                 var pacienteAssociado = patientService.findPatientByName(userRequest.getNomeCompletoPaciente());
                 userEntity.setIdPaciente(pacienteAssociado.getIdPaciente());

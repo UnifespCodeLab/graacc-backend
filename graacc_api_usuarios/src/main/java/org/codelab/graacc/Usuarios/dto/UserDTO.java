@@ -1,4 +1,5 @@
 package org.codelab.graacc.Usuarios.dto;
+import java.util.Arrays;
 
 public class UserDTO {
     private Long idUsuario;
@@ -7,6 +8,7 @@ public class UserDTO {
     private boolean cadastroConfirmado;
     private String role;
     private Long idPaciente;
+    private byte[] profileImage;
 
     public UserDTO() {
     }
@@ -66,6 +68,14 @@ public class UserDTO {
 
     public void setIdPaciente(Long idPaciente) {
         this.idPaciente = idPaciente;
+    }
+
+    public byte[] getProfileImage() {
+      return Arrays.copyOf(profileImage, profileImage.length);
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+      this.profileImage = Arrays.copyOf(profileImage, profileImage.length);
     }
 
     @Override
