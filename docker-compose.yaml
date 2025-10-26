@@ -1,121 +1,113 @@
-version: '3.8'
-
 services:
-  # --- Bancos de Dados ---
-  usuarios-db:
-    image: postgres:13
-    container_name: usuarios-db
+  # --- Banco de Dados ---
+  graacc-db:
+    image: postgres:16
+    container_name: graacc-db
+    restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: usuarios
+      POSTGRES_DB: graacc
     ports:
       - "5432:5432"
     volumes:
-      - usuarios-data:/var/lib/postgresql/data
-      - ./graacc_api_usuarios/src/test/resources/data.sql:/docker-entrypoint-initdb.d/init.sql
+      - graacc-db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  agendamentos-db:
-    image: postgres:13
-    container_name: agendamentos-db
+  graacc-pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: graacc-pgadmin
+    restart: always
+    depends_on:
+      - graacc-db
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: agendamentos
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: password
     ports:
-      - "5433:5432"
+      - 5433:80
     volumes:
-      - agendamentos-data:/var/lib/postgresql/data
-
-  notificacoes-db:
-    image: postgres:13
-    container_name: notificacoes-db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: notificacoes
-    ports:
-      - "5434:5432"
-    volumes:
-      - notificacoes-data:/var/lib/postgresql/data
-
-  # --- Mock Server ---
-  wiremock:
-    image: wiremock/wiremock:latest
-    container_name: wiremock
-    command: --port 8080 --verbose
-    ports:
-      - "9090:8080"
-    volumes:
-      - ./graacc-api-mock/mappings:/home/wiremock/mappings
+      - pgadmin:/var/lib/pgadmin
 
   # --- Microsserviços Java ---
   usuarios-api:
     container_name: usuarios-api
     build:
-      context: ./graacc_api_usuarios
+      context: ./usuarios
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
+      - "8082:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://usuarios-db:5432/usuarios
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
-      - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8081
+      - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8080
     depends_on:
-      - usuarios-db
+      - graacc-db
 
   agendamentos-api:
     container_name: agendamentos-api
     build:
-      context: ./graacc_api_agendamentos
+      context: ./agendamentos
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8081:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://agendamentos-db:5432/agendamentos
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
     depends_on:
-      - agendamentos-db
+      - graacc-db
 
   notificacoes-api:
     container_name: notificacoes-api
     build:
-      context: ./graacc_api_notificacoes
+      context: ./notificacoes
       dockerfile: Dockerfile
     ports:
-      - "8083:8083"
+      - "8083:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://notificacoes-db:5432/notificacoes
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
     depends_on:
-      - notificacoes-db
+      - graacc-db
 
   orquestrador-api:
     container_name: orquestrador-api
     build:
-      context: ./graacc_api_orquestrador
+      context: ./orquestrador
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8084:8080"
     environment:
-      - URL_MS_USUARIOS=http://usuarios-api:8082
-      - URL_MS_AGENDAMENTOS=http://agendamentos-api:8081
-      - URL_MS_NOTIFICACOES=http://notificacoes-api:8083
+      - URL_MS_USUARIOS=http://usuarios-api:8080
+      - URL_MS_AGENDAMENTOS=http://agendamentos-api:8080
+      - URL_MS_NOTIFICACOES=http://notificacoes-api:8080
     depends_on:
       - usuarios-api
       - agendamentos-api
       - notificacoes-api
 
+  cors-proxy:
+    container_name: cors-proxy
+    image: nginx
+    ports:
+      - "8080:80"
+    restart: on-failure
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
 volumes:
-  usuarios-data:
-  agendamentos-data:
-  notificacoes-data:
+  graacc-db:
+  pgadmin:
+
+networks:
+  default:
+    name: local-network
+    external: true

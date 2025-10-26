@@ -22,6 +22,17 @@ Para visualizar os logs, execute o comando:
 ```bash
 docker-compose logs -f
 ```
+
+Acessar banco de dados:
+```bash
+docker exec -it graacc-db psql -d graacc -U user
+```
+
+Atualizar microsserviços para o último commit:
+```bash
+git submodule foreach git pull origin master
+```
+
 ### Documentação da api 
 http://localhost:8080/swagger-ui/index.html
 
