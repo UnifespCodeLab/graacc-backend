@@ -1,6 +1,6 @@
 services:
-  # --- Bancos de Dados ---
-  usuarios-db:
+  # --- Banco de Dados ---
+  graacc-db:
     image: postgres:13
     container_name: usuarios-db
     restart: always
@@ -11,49 +11,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./usuarios_db:/var/lib/postgresql/data
-      - ./graacc_api_usuarios/src/test/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-  #agendamentos-db:
-  #  image: postgres:13
-  #  container_name: agendamentos-db
-  #  environment:
-  #    POSTGRES_USER: user
-  #    POSTGRES_PASSWORD: password
-  #    POSTGRES_DB: agendamentos
-  #  ports:
-  #    - "5433:5432"
-  #  volumes:
-  #    - ./agendamentos-db:/var/lib/postgresql/data
-  #    - ./graacc_api_agendamentos/src/test/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-  #notificacoes-db:
-  #  image: postgres:13
-  #  container_name: notificacoes-db
-  #  environment:
-  #    POSTGRES_USER: user
-  #    POSTGRES_PASSWORD: password
-  #    POSTGRES_DB: notificacoes
-  #  ports:
-  #    - "5434:5432"
-  #  volumes:
-  #    - notificacoes-data:/var/lib/postgresql/data
-
-  # --- Mock Server ---
-  wiremock:
-    image: wiremock/wiremock:latest
-    container_name: wiremock
-    command: --port 8080 --verbose
-    ports:
-      - "9090:8080"
-    volumes:
-      - ./graacc-api-mock/mappings:/home/wiremock/mappings
+      - ./graacc-db:/var/lib/postgresql/data
+      - ./graacc-api-usuarios/src/test/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   # --- Microsserviços Java ---
   usuarios-api:
     container_name: usuarios-api
     build:
-      context: ./graacc_api_usuarios
+      context: ./graacc-api-usuarios
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
@@ -65,12 +30,12 @@ services:
       - SECURITY_EMISSOR=codelab
       - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8080
     depends_on:
-      - usuarios-db
+      - graacc-db
 
   agendamentos-api:
     container_name: agendamentos-api
     build:
-      context: ./graacc_api_agendamentos
+      context: ./graacc-api-agendamentos
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
@@ -81,13 +46,12 @@ services:
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
     depends_on:
-    #  - agendamentos-db
-      - usuarios-db
+      - graacc-db
 
   notificacoes-api:
     container_name: notificacoes-api
     build:
-      context: ./graacc_api_notificacoes
+      context: ./graacc-api-notificacoes
       dockerfile: Dockerfile
     ports:
       - "8083:8080"
@@ -98,8 +62,7 @@ services:
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
     depends_on:
-    #  - notificacoes-db
-      - usuarios-db
+      - graacc-db
 
   orquestrador-api:
     container_name: orquestrador-api
@@ -117,8 +80,8 @@ services:
       - agendamentos-api
       - notificacoes-api
 
-  cors_proxy:
-    container_name: cors_proxy
+  cors-proxy:
+    container_name: cors-proxy
     image: nginx
     ports:
       - "80:80"
@@ -130,6 +93,6 @@ volumes:
   usuarios-data:
   agendamentos-data:
   notificacoes-data:
-  usuarios-db:
+  graacc-db:
   agendamentos-db:
   notificacoes-db:

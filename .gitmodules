@@ -1,0 +1,3 @@
+[submodule "orquestrador"]
+	path = orquestrador
+	url = git@github.com:UnifespCodeLab/graacc_api_orquestrador.git
