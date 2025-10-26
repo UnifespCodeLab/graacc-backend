@@ -1,18 +1,32 @@
 services:
   # --- Banco de Dados ---
   graacc-db:
-    image: postgres:13
-    container_name: usuarios-db
+    image: postgres:16
+    container_name: graacc-db
     restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: usuarios
+      POSTGRES_DB: graacc
     ports:
       - "5432:5432"
     volumes:
       - graacc-db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  graacc-pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: graacc-pgadmin
+    restart: always
+    depends_on:
+      - graacc-db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - 8080:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
 
   # --- Microsserviços Java ---
   usuarios-api:
@@ -23,7 +37,7 @@ services:
     ports:
       - "8082:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://usuarios-db:5432/usuarios
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
@@ -40,7 +54,7 @@ services:
     ports:
       - "8081:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://usuarios-db:5432/usuarios
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
@@ -56,7 +70,7 @@ services:
     ports:
       - "8083:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://usuarios-db:5432/usuarios
+      - DATABASE_URL=jdbc:postgresql://graacc-db:5432/graacc
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
@@ -70,7 +84,7 @@ services:
       context: ./orquestrador
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8084:8080"
     environment:
       - URL_MS_USUARIOS=http://usuarios-api:8080
       - URL_MS_AGENDAMENTOS=http://agendamentos-api:8080
@@ -84,7 +98,7 @@ services:
     container_name: cors-proxy
     image: nginx
     ports:
-      - "80:80"
+      - "8080:80"
     restart: on-failure
     volumes:
       - nginx:/etc/nginx/templates
@@ -92,3 +106,9 @@ services:
 volumes:
   nginx:
   graacc-db:
+  pgadmin:
+
+networks:
+  default:
+    name: local-network
+    external: true
