@@ -1,3 +1,12 @@
 [submodule "orquestrador"]
 	path = orquestrador
 	url = git@github.com:UnifespCodeLab/graacc_api_orquestrador.git
+[submodule "usuarios"]
+	path = usuarios
+	url = git@github.com:UnifespCodeLab/graacc_api_usuarios.git
+[submodule "agendamentos"]
+	path = agendamentos
+	url = git@github.com:UnifespCodeLab/graacc_api_agendamentos.git
+[submodule "notificacoes"]
+	path = notificacoes
+	url = git@github.com:UnifespCodeLab/graacc_api_notificacoes.git

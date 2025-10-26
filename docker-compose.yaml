@@ -11,14 +11,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./graacc-db:/var/lib/postgresql/data
-      - ./graacc-api-usuarios/src/test/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - graacc-db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   # --- Microsserviços Java ---
   usuarios-api:
     container_name: usuarios-api
     build:
-      context: ./graacc-api-usuarios
+      context: ./usuarios
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
@@ -35,7 +35,7 @@ services:
   agendamentos-api:
     container_name: agendamentos-api
     build:
-      context: ./graacc-api-agendamentos
+      context: ./agendamentos
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
@@ -51,7 +51,7 @@ services:
   notificacoes-api:
     container_name: notificacoes-api
     build:
-      context: ./graacc-api-notificacoes
+      context: ./notificacoes
       dockerfile: Dockerfile
     ports:
       - "8083:8080"
@@ -67,7 +67,7 @@ services:
   orquestrador-api:
     container_name: orquestrador-api
     build:
-      context: ./graacc_api_orquestrador
+      context: ./orquestrador
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -87,12 +87,8 @@ services:
       - "80:80"
     restart: on-failure
     volumes:
-      - ./nginx:/etc/nginx/templates
+      - nginx:/etc/nginx/templates
 
 volumes:
-  usuarios-data:
-  agendamentos-data:
-  notificacoes-data:
+  nginx:
   graacc-db:
-  agendamentos-db:
-  notificacoes-db:

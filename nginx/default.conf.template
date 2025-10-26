@@ -13,13 +13,6 @@ server {
     add_header 'Access-Control-Allow-Methods' '*' always;
     add_header 'Access-Control-Allow-Headers' '*' always;
 
-    #add_header 'Access-Control-Allow-Origin' "$http_origin" always;
-    #add_header 'Access-Control-Allow-Credentials' 'true' always;
-    #add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
-    #add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With' always;
-
-    #rewrite /(.*) /$1 break;
-
     if ($request_method = 'OPTIONS') {
         # Tell client that this pre-flight info is valid for 20 days
         add_header 'Access-Control-Allow-Origin' "$http_origin" always;
@@ -34,30 +27,4 @@ server {
 
     proxy_pass http://orquestrador-api:8080/;
   }
-  
-#  location /users/ {
-#    proxy_set_header Host $host;
-#    proxy_set_header X-Real-IP $remote_addr;
-#    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#    proxy_set_header X-Forwarded-Proto $scheme;
-#
-#    add_header 'Access-Control-Allow-Origin' '*' always;
-#    add_header 'Access-Control-Allow-Credentials' 'true' always;
-#    add_header 'Access-Control-Allow-Methods' '*' always;
-#    add_header 'Access-Control-Allow-Headers' '*' always;
-#
-#    if ($request_method = 'OPTIONS') {
-#        # Tell client that this pre-flight info is valid for 20 days
-#        add_header 'Access-Control-Allow-Origin' "$http_origin" always;
-#        add_header 'Access-Control-Allow-Credentials' 'true' always;
-#        add_header 'Access-Control-Allow-Headers' "Origin, X-Requested-With, Authorization, Content-Type, Accept" always;
-#        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
-#        add_header 'Access-Control-Max-Age' 1728000;
-#        add_header 'Content-Type' 'text/plain; charset=utf-8';
-#        add_header 'Content-Length' 0;
-#        return 204;
-#    }
-#
-#    proxy_pass http://usuarios-api:8080/;
-#  }
 }
