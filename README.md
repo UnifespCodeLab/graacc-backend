@@ -14,7 +14,7 @@ Para executar o projeto, você precisa ter o Docker e o Docker Compose instalado
 ou
 
 ```bash
-docker-compose up --build -d
+docker-compose up --build -d --remove-orphans
 ```
 
 Para visualizar os logs, execute o comando:
