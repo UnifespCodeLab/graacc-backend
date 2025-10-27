@@ -30,7 +30,7 @@ docker exec -it graacc-db psql -d graacc -U user
 
 Atualizar microsserviços para o último commit:
 ```bash
-git submodule foreach git pull origin master
+git submodule foreach git pull origin main
 ```
 
 ### Documentação da api 
