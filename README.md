@@ -4,7 +4,7 @@
 
 Para executar o projeto, você precisa ter o Docker e o Docker Compose instalados.
 
-1.  Clone o repositório.
+1.  Clone o repositório com `git clone --recursive -j8 url-do-backend`;
 2.  Execute o script `start.sh` ou execute o comando `docker-compose up --build -d` na raiz do projeto.
 
 ```bash
