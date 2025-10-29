@@ -1,6 +1,7 @@
 #!/bin/bash
 # Script para construir e iniciar todos os serviços do projeto com Docker Compose.
 echo "Atualizando todos os microsserviços para o último commit..."
+git submodule update --remote
 git submodule foreach git pull origin main
 
 echo "Criando a rede local-network..."
