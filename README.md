@@ -34,7 +34,7 @@ git submodule foreach git pull origin main
 ```
 
 ### Documentação da api 
-http://localhost:8080/swagger-ui/index.html
+http://localhost/swagger-ui/index.html
 
 ## Como o projeto funciona
 
