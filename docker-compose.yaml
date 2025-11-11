@@ -43,6 +43,7 @@ services:
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
       - URL_API_GRAACC_AGENDAMENTOS=http://agendamentos-api:8080
+      - SERVER_PORT=8080
     depends_on:
       - graacc-db
 
@@ -59,6 +60,7 @@ services:
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
+      - SERVER_PORT=8080
     depends_on:
       - graacc-db
 
@@ -75,6 +77,7 @@ services:
       - DATABASE_PASSWORD=password
       - SECURITY_TOKEN=secret
       - SECURITY_EMISSOR=codelab
+      - SERVER_PORT=8080
     depends_on:
       - graacc-db
 
@@ -89,6 +92,7 @@ services:
       - URL_MS_USUARIOS=http://usuarios-api:8080
       - URL_MS_AGENDAMENTOS=http://agendamentos-api:8080
       - URL_MS_NOTIFICACOES=http://notificacoes-api:8080
+      - SERVER_PORT=8080
     depends_on:
       - usuarios-api
       - agendamentos-api
