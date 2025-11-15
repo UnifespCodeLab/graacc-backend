@@ -33,6 +33,11 @@ Atualizar microsserviços para o último commit:
 git submodule foreach git pull origin main
 ```
 
+Ver o IP de cada container:
+```bash
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' id-do-container 
+```
+
 ### Documentação da api 
 http://localhost/swagger-ui/index.html
 
